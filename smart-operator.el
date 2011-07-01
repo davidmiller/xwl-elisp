@@ -47,7 +47,7 @@
 
 (defvar smart-operator-mode-map
   (let ((keymap (make-sparse-keymap)))
-    (define-key keymap "=" 'smart-operator-self-insert-command)
+    (define-key keymap "=" 'smart-operator-=)
     (define-key keymap "<" 'smart-operator-<)
     (define-key keymap ">" 'smart-operator->)
     (define-key keymap "%" 'smart-operator-%)
@@ -352,6 +352,17 @@ so let's not get too insert-happy."
          (insert "/"))
         (t
          (smart-operator-insert "/"))))
+
+(defun smart-operator-= ()
+  "See `smart-operator-insert'."
+  (interactive)
+  ;; PEP 8 dictates that KW args or default parameters
+  ;; get entered as foo(baz=bar)
+  (cond ((and (memq major-mode '(python-mode))
+              (looking-back "\([a-z]+"))
+         (insert "="))
+        (t
+         (smart-operator-insert "="))))
 
 (provide 'smart-operator)
 
